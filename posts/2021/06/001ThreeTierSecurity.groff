@@ -1,0 +1,44 @@
+.TL Three_Tiered_Security
+.AU Paul Jones
+.CAT TECH
+
+Three Tiered Security
+.LP
+
+In order to increase privacy and security on the web, one of the biggest tradeoffs is normally convenience. So, I separated my online lifestyle into 3 tiers, each with their own security and privacy requirements. Using a more lax approach for random online forums I like to lurk, will hopefully bring some of the convenience back to my online life, especially when it comes to accessing passwords and email on multiple devices, without sacrificing the security and privacy where it is most necessary.
+
+.LP
+.LP
+TIER 1 
+.LP
+- banks, amzn, paypal, etc, large financial impact of security breach
+.LP
+- passwords locked by gpg key (not distributed, can only be accessed from limited devices, i use pass, the unix password manager)
+.LP
+- email sent to encrypted self hosted email (proton mail if you really cannot self host)
+
+.LP
+.LP
+TIER 2
+.LP
+- streaming services, mobile provider, limited impacted of security breach
+.LP
+- passwords stored in mobile vault (self distributed)
+.LP
+- email sent to third party (but secure and privacy minded) email address (tutanota)
+
+.LP
+.LP
+TIER 3
+.LP
+- forums, free sites, github, social media maintaining an extended online identity but zero or very little financial impact
+.LP
+- passwords stored in web vault (bitwarden, once could consider using bitwarden for both tier 2 and tier 3 passwords)
+.LP
+- email sent to third party email address (could be anything, being American I considered Yandex, figuring the Russian government won’t share info about me to the U.S. government)
+
+.LP
+.LP
+TIER 4
+.LP
+- burner
