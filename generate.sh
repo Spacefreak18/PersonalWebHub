@@ -104,7 +104,7 @@ groff -ms -mwww -T html now.groff > web/now.html
 DateStamp web/now.html "$(date +'%Y-%m-%d %H:%M:%S')"
 
 echo "<rss version=\"2.0\">
-    <channel>$SITENAME</channel>
+    <channel>
         <title>$SITENAME</title>
         <link>$SITEADDRESS</link>
         <description>$SITEDESCRIPTION</description>
