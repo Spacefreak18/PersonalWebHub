@@ -1,0 +1,28 @@
+.TL Hipster_Internet
+.AU Paul Jones
+.CAT TECH
+
+Hipster Internet
+.LP
+
+Since the turn of the millenium, the internet has slowly transformed from an open decentralized frontier, into a closed marketplace where only a small number of web sites get a majority of the traffic.
+
+.LP
+.LP
+Before Facebook, WhatsApp, and Twitter, people still managed to share what was going on with one another without having to be at the mercy of these corporations. Using free and open and existing standards,
+that have been in place for quite some time, we can replace the functionality these services provide.
+.LP
+Facebook
+.LP
+In place of Facebook, simply maintain your own web page. One can do so from a modest Raspberry Pi device with a permanent residential connection. And a domain can be had for $10-$20 a year. There are many web site generators that make transforming your posts into pages much simpler. I recommend BoomerCMS.
+.LP
+Twitter
+.LP
+RSS feeds are an open standard that can notify your friends of your status updates and replace tweets and Facebook status updates. There are many feed readers available for all the relevant platforms, with varying degrees of functionality. And this allows users to consume content from their friends, influencers, and news sources on their own terms, without the threat of censorship from big corporations and government.
+.LP
+WhatsApp
+.LP
+For more direct and instantaneous conversations xmpp is an often overlooked standard.
+Ejabberd is a chat server that is easy to setup. And the Conversations app on Android provides many of the same functionality. With the addition of end to end encryption, and increased privacy.
+.LP
+And don't forget the original direct-message protocol - email. There are many different email clients and email hosting options available.
