@@ -60,7 +60,7 @@ do
     test -f "$PAGEFILENAME"_custom.groff && cat "$PAGEFILENAME"_custom.groff >> $PAGEFILENAME.groff
     echo "" >> $PAGEFILENAME.groff
     echo ".B \"Recent Posts\"" >> $PAGEFILENAME.groff    
-    for f in posts/*/*/*
+    for f in $(ls -1r posts/*/*/*)
     do
         LINK=$(echo $f | sed "s/.groff/.html/g")
         CATEGORY=$(grep -r -m1 ".CAT" "$f" | sed "s/.CAT //g")
@@ -99,7 +99,7 @@ for f in web/*.html
 done
 
 rm -f now.groff
-grep -r ".TL" posts/ | sed "s/.groff/.html/g" | sed "s/posts/\n.URL posts/g" | sed "s/:.TL / /g" >> now.groff
+grep -r ".TL" $(ls -1r posts/*/*/*) | sed "s/.groff/.html/g" | sed "s/posts/\n.URL posts/g" | sed "s/:.TL / /g" >> now.groff
 groff -ms -mwww -T html now.groff > web/now.html
 DateStamp web/now.html "$(date +'%Y-%m-%d %H:%M:%S')"
 
