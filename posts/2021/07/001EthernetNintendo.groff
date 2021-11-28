@@ -1,6 +1,6 @@
 .TL Ethernet_Nintendo
 .AU Paul Jones
-.CAT TECH
+.CAT RETRO
 
 Ethernet Nintendo
 .LP
@@ -49,7 +49,8 @@ So I researched the protocol that the Retroarch emulator uses for Netplay which 
 .URL https://github.com/libretro/RetroArch/tree/master/network/netplay
 .LP
 I came up with a design that utilized 3 arduinos. 1 arduino uno for sending input into the Nintendo, 1 arduino uno for receiving output from the nintendo, and an arduino mega with a w5100 ethernet shield. The mega does all of the heavy lifting here of implementing a tcp/ip stack and the code I wrote to bit shift the raw electrical data to and from tcp/ip packets.
-.URL https://www.youtube.com/watch?v=QUaQ2258e90 "Watch this in action."
+.LP
+.URL https://www.youtube.com/watch?v=QUaQ2258e90 "Watch this in action"
 .LP
 .PIMG https:/repo.brak.space/EthernetNintendo2.jpg
 .LP
