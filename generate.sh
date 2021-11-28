@@ -13,6 +13,16 @@ DateStamp() {
 
 }
 
+
+HashOver() {
+    sed -i '$ d' $1
+    echo "<div id=\"hashover\"></div>" >> $1
+    echo "<script type=\"text/javascript\" src=\"../../../hashover/comments.php\"></script>" >> $1
+    echo "<noscript>You must have javascript enabled for comments.</noscript>" >> $1
+    echo "</html>" >> $1
+
+}
+
 # CAT comes from settings.sh
 GetCategory() {
     USECATEGORY=$1
@@ -87,6 +97,7 @@ for f in posts/*/*/*
     groff -ms -mwww -T html $f > $GENERATED
     #groff -ms -mwww -T html $f > "web/"$(dirname $f)"/"$(basename $f .groff).html
 
+    HashOver $GENERATED
     DateStamp $GENERATED "$(git log -1 --date=format:'%Y-%m-%d %H:%M:%S' -- $f | tail -n3 | head -n1)"
 done
 
