@@ -52,7 +52,7 @@ I came up with a design that utilized 3 arduinos. 1 arduino uno for sending inpu
 .LP
 .URL https://www.youtube.com/watch?v=QUaQ2258e90 "Watch this in action"
 .LP
-.PIMG https:/repo.brak.space/EthernetNintendo2.jpg
+.PIMG https://repo.brak.space/EthernetNintendo2.jpg
 .LP
 In addition to mapping the correct signals from the nintendo to the correct bits in the netplay packet, there is a lot of handshaking that needs to be handled by the Arduino Mega for the Netplay protocol, most of which is just hardcoded to send back exactly what is sent from the Netplay host.
 .LP
