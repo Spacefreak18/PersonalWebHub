@@ -1,0 +1,72 @@
+.TL Ethernet_Nintendo
+.AU Paul Jones
+.CAT TECH
+
+Ethernet Nintendo
+.LP
+
+Released in 1983, the original Nitendo Entertainment System has become the target of many a hobbyist experiment, in an attempt to push the humble specs of the system to their limit.
+
+.LP
+.LP
+
+.LP
+The system has a 72 pin cartridge, 2 controllers, 8 bit cpu and ppu, and 64kb of addressable memory. But not many have bothered to flip the NES over and do a little exploration.
+If so, one would find an expansion port.
+.PIMG https://repo.brak.space/epport.jpg
+.LP
+An expansion port that was unused here in the United States. With the notable relevant exception, of the Minnesota State Lottery, which hooked the NES up to the internet in the 90s. But little if any about these devices is actually known.
+.PIMG https://www.destructoid.com/ul/137392-untapped-potential-a-true-family-computer/UP-Lottery-620x.jpg
+This being the only picture to my knowledge available on the internet of the device.
+.LP
+I experimented with a couple methods to create an adapter for the expansion port, but what I settled on was a test board I found on eBay, and some rubber shims.
+.LP
+.PIMG https://repo.brak.space/EthernetNintendoAdapter.jpg
+.LP
+.LP
+Luckily the pinout for the expansion port is readily available on the internet.
+.URL https://wiki.nesdev.org/w/index.php/Expansion_port
+.LP
+.LP
+The first project I decided to attempt was a "Controller Input LED Board".
+.LP
+.LP
+Several of the 48 signals available through the expansion port are data lines that go to the two controller ports on the system. Some of the controller data lines are only used for light guns and other special peripherals. So if we are using the standard controllers the only signals we care about ar the D0 lines.
+.LP
+.LP
+My goal was to create a board which would light an LED for each button that was pressed. Obviously, since there is only one data line, the timing is quite important. The actual protocol the NES controllers used is also well documented. Using a single arduino board to interpret the signal, I was able to light a specific LED for each button.
+.URL https://www.youtube.com/watch?v=dahbvSYV0KA "NES Controller Electronics"
+.LP
+.LP
+The way this was accomplished is game specific, but I believe you'd only need a few different versions to accomodate all the games in the NES library.
+
+At this point it occured to me, that if the arduino could interpret the protocol of the controller coming out from the Nintendo, it could do the reverse. It could take signals from some ofther source and send signals at the correct time that the Nintendo could understand. The D0 lines available on the expansion port can be used as input or output.
+.LP
+.PIMG https://repo.brak.space/EthernetNintendo1.jpg
+.LP
+So I researched the protocol that the Retroarch emulator uses for Netplay which is very well documented, and the code for the emulator is available on Github.
+.LP
+.URL https://github.com/libretro/RetroArch/tree/master/network/netplay
+.LP
+I came up with a design that utilized 3 arduinos. 1 arduino uno for sending input into the Nintendo, 1 arduino uno for receiving output from the nintendo, and an arduino mega with a w5100 ethernet shield. The mega does all of the heavy lifting here of implementing a tcp/ip stack and the code I wrote to bit shift the raw electrical data to and from tcp/ip packets.
+.URL https://www.youtube.com/watch?v=QUaQ2258e90 "Watch this in action."
+.LP
+.PIMG https:/repo.brak.space/EthernetNintendo2.jpg
+.LP
+In addition to mapping the correct signals from the nintendo to the correct bits in the netplay packet, there is a lot of handshaking that needs to be handled by the Arduino Mega for the Netplay protocol, most of which is just hardcoded to send back exactly what is sent from the Netplay host.
+.LP
+While completing this project I came across an individual/YouTube channel which did a lot of similar work, and even theorized that Netplay ( or as he put it an RPG ) would be possible. I believe his name is Pete Brown (youtube id: Chykn80 ) and he is the creator of the ENIO ( a board to connect to the Nintendo Expansion Port )
+.LP
+.PIMG https://external-preview.redd.it/XObcuQVxUiRG7Kh3Ojv88Pxm8auYryA5hzDOdgOKauo.jpg?auto=webp&s=6e266a35e694fdb2aa2a5baa9648c72a102fdcfb
+.LP
+He also appears to have created a single board that can also allow the Nintendo to have ethernet capabilities, by plugging it into his ENIO adapter. This project appears to be abandoned, and ENIOs are out of stock everywhere. This YouTube seems to be the last that was heard from the project.
+.URL https://www.youtube.com/watch?v=KBSdktDG_tk
+.LP
+Another similar project is the tweeting Nintendo. Which uses a custom cartridge and a similar board connected to the expansion port to allow the Nintendo to tweet.
+.LP
+.URL https://hackaday.com/2015/05/01/tweeting-from-the-nes-expansion-port/
+.PIMG https://hackaday.com/wp-content/uploads/2015/04/nes_wiring.png
+.LP
+.LP
+As far as next steps go, I am unsure. This was a fun project as a proof of concept building on the work that has come before. However, the latencies involved mean this is far from practical. One follow up project I'm considering is building my own cartridge and game for a lottery game, that uses lottery numbers that are retrieved from the internet.
+Or, while I don't believe that a live action game is possible over the internet, I do believe some sort of turn based RPG would be possible, but that is a much longer and involved project, partly because no such game to my knowledge exists in the Nintendo catalogue.
