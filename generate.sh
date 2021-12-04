@@ -40,6 +40,8 @@ GetCategory() {
 # create index page 
 rm index.groff
 custom_index=`cat index_custom.groff`
+echo ".B \"""$SITETITLE""\"" >> index.groff
+echo "" >> index.groff
 echo ".B \"""$SITEDESCRIPTION""\"" >> index.groff
 echo "" >> index.groff
 echo ".MTO "$MAILTO >> index.groff

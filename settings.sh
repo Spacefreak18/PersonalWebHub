@@ -1,5 +1,6 @@
 SITENAME="My Website"
 SITEADDRESS=https://example.com
+SITETITLE="My Personal Site"
 SITEDESCRIPTION="My Personal Web Pages"
 MAILTO=me@example.com
 
