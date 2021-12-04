@@ -1,8 +1,8 @@
 SITENAME="My Website"
-SITEADDRESS=https://example.com
-SITETITLE="My Personal Site"
-SITEDESCRIPTION="My Personal Web Pages"
-MAILTO=me@example.com
+SITEADDRESS=https://spacefreak18.xyz
+SITETITLE="Pauls Personal Web Hub"
+SITEDESCRIPTION="Engineer, Inventor, Musician, Economist, Philosopher"
+MAILTO=paul@spacefreak18.xyz
 
 CATCOUNT=5
 CAT1=TECH
