@@ -1,6 +1,8 @@
-.URL https://pgp.mit.edu/pks/lookup?op=get&search=0xEF2F62BC4F4A69B3 "My GPG Public Key"
 
 .URL now.html "Recent Activity"
+
+.URL https://pgp.mit.edu/pks/lookup?op=vindex&search=0xEF2F62BC4F4A69B3 "My Signed GPG Public Key"
+
 
 .PIMG https://upload.wikimedia.org/wikipedia/commons/4/4c/%D0%90%D1%80%D0%BD%D0%BE%D0%B1%D0%B8%D0%B9_%D0%A1%D1%82%D0%B0%D1%80%D1%88%D0%B8%D0%B9_-Arnobius_of_Sicca.jpg
 
