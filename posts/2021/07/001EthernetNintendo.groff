@@ -31,7 +31,7 @@ Luckily the pinout for the expansion port is readily available on the internet.
 The first project I decided to attempt was a "Controller Input LED Board".
 .LP
 .LP
-Several of the 48 signals available through the expansion port are data lines that go to the two controller ports on the system. Some of the controller data lines are only used for light guns and other special peripherals. So if we are using the standard controllers the only signals we care about ar the D0 lines.
+Several of the 48 signals available through the expansion port are data lines that go to the two controller ports on the system. Some of the controller data lines are only used for light guns and other special peripherals. So if we are using the standard controllers the only signals we care about are the D0 lines.
 .LP
 .LP
 My goal was to create a board which would light an LED for each button that was pressed. Obviously, since there is only one data line, the timing is quite important. The actual protocol the NES controllers used is also well documented. Using a single arduino board to interpret the signal, I was able to light a specific LED for each button.
