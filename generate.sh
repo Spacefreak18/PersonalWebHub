@@ -44,7 +44,9 @@ echo ".B \"""$SITETITLE""\"" >> index.groff
 echo "" >> index.groff
 echo ".B \"""$SITEDESCRIPTION""\"" >> index.groff
 echo "" >> index.groff
-echo ".MTO "$MAILTO >> index.groff
+test "$SHOWMAILTO" = "YES" && echo ".MTO "$MAILTO >> index.groff
+test "$SHOWMAILTO" = "Yes" && echo ".MTO "$MAILTO >> index.groff
+test "$SHOWMAILTO" = "yes" && echo ".MTO "$MAILTO >> index.groff
 echo "" >> index.groff
 for i in $(seq 1 $CATCOUNT) 
 do
@@ -70,8 +72,13 @@ do
     PAGEFILENAME=$(echo "$A" | tr '[A-Z]' '[a-z]')
     rm -f "$PAGEFILENAME".groff
     test -f "$PAGEFILENAME"_custom.groff && cat "$PAGEFILENAME"_custom.groff >> $PAGEFILENAME.groff
+    for f in "$PAGEFILENAME"_custom.*.groff; do
+        cat "$f" >> $PAGEFILENAME.groff
+    done
     echo "" >> $PAGEFILENAME.groff
-    echo ".B \"Recent Posts\"" >> $PAGEFILENAME.groff    
+    test "$SHOWRECENTPOSTS" = "YES" && echo ".B \"Recent Posts\"" >> $PAGEFILENAME.groff    
+    test "$SHOWRECENTPOSTS" = "Yes" && echo ".B \"Recent Posts\"" >> $PAGEFILENAME.groff    
+    test "$SHOWRECENTPOSTS" = "yes" && echo ".B \"Recent Posts\"" >> $PAGEFILENAME.groff    
     for f in $(ls -1r posts/*/*/*)
     do
         LINK=$(echo $f | sed "s/.groff/.html/g")
@@ -112,7 +119,7 @@ for f in web/*.html
 done
 
 rm -f now.groff
-grep -r ".TL" $(ls -1r posts/*/*/*) | sed "s/.groff/.html/g" | sed "s/posts/\n.URL posts/g" | sed "s/:.TL / /g" >> now.groff
+test -d posts && grep -r ".TL" $(ls -1r posts/*/*/*) | sed "s/.groff/.html/g" | sed "s/posts/\n.URL posts/g" | sed "s/:.TL / /g" >> now.groff
 groff -ms -mwww -T html now.groff > web/now.html
 DateStamp web/now.html "$(date +'%Y-%m-%d %H:%M:%S')"
 

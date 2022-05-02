@@ -3,6 +3,8 @@ SITEADDRESS=https://example.com
 SITETITLE="My Personal Site"
 SITEDESCRIPTION="My Personal Web Pages"
 MAILTO=me@example.com
+SHOWRECENTPOSTS="Yes"
+SHOWMAILTO="Yes"
 
 CATCOUNT=3
 CAT1=ABOUT
