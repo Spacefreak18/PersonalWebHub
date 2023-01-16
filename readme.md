@@ -22,3 +22,9 @@ generates the file groff file. I recommend adding those to your .gitignore.
 # Installation
 Setup your webserver to point to the location of your forked BoomerCMS repository with correct privileges.
 Optionally setup a cronjob to automatically run git pull and generate.sh for automated periodic deploys.
+
+# Shellcheck
+Run shellcheck to validate POSIX compliance with shellcheck -x .settings.sh generate.sh
+
+# ToDo
+Use shellcheck to improve POSIX compliance, starting with removing sed -i
