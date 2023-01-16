@@ -1,3 +1,5 @@
+#!/bin/sh
+
 SITENAME="My Website"
 SITEADDRESS=https://example.com
 SITETITLE="My Personal Site"

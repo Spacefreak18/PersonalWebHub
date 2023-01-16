@@ -5,22 +5,20 @@ mkdir -p web
 . ./settings.sh
 
 DateStamp() {
-    sed -i '$ d' $1
-    echo -n "<p>Page Last Edited: " >> $1
-    echo -n "$2" | sed -s 's/Date: //' >> $1
-    echo "</p>" >> $1
-    echo -n "</html>" >> $1
-
+    INPUT=$(sed '$ d' "$1")
+    printf "<p>Page Last Edited: " >> "$INPUT"
+    echo "$2" | sed -s 's/Date: //' >> "$INPUT"
+    printf "</p>\n" >> "$INPUT"
+    printf "</html>" >> "$INPUT"
 }
 
 
 HashOver() {
-    sed -i '$ d' $1
-    echo "<div id=\"hashover\"></div>" >> $1
-    echo "<script type=\"text/javascript\" src=\"../../../hashover/comments.php\"></script>" >> $1
-    echo "<noscript>You must have javascript enabled for comments.</noscript>" >> $1
-    echo "</html>" >> $1
-
+    INPUT=$(sed '$ d' "$1")
+    printf "<div id=\"hashover\"></div>" >> "$INPUT"
+    printf "<script type=\"text/javascript\" src=\"../../../hashover/comments.php\"></script>" >> "$INPUT"
+    printf "<noscript>You must have javascript enabled for comments.</noscript>" >> "$INPUT"
+    printf "</html>" >> "$INPUT"
 }
 
 # CAT comes from settings.sh
