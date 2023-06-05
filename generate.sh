@@ -5,20 +5,25 @@ mkdir -p web
 . ./settings.sh
 
 DateStamp() {
-    INPUT=$(sed '$ d' "$1")
-    printf "<p>Page Last Edited: " >> "$INPUT"
-    echo "$2" | sed -s 's/Date: //' >> "$INPUT"
-    printf "</p>\n" >> "$INPUT"
-    printf "</html>" >> "$INPUT"
+    sed -i '$ d' "$1"
+    {
+        printf "<p>Page Last Edited: %s\n" "$2"
+        echo "</p>"
+        printf "</html>\n"
+    } >> "$1"
+
 }
 
 
 HashOver() {
-    INPUT=$(sed '$ d' "$1")
-    printf "<div id=\"hashover\"></div>" >> "$INPUT"
-    printf "<script type=\"text/javascript\" src=\"../../../hashover/comments.php\"></script>" >> "$INPUT"
-    printf "<noscript>You must have javascript enabled for comments.</noscript>" >> "$INPUT"
-    printf "</html>" >> "$INPUT"
+    sed -i '$ d' "$1"
+    {
+        echo "<div id=\"hashover\"></div>"
+        echo "<script type=\"text/javascript\" src=\"../../../hashover/comments.php\"></script>"
+        echo "<noscript>You must have javascript enabled for comments.</noscript>"
+        echo "</html>"
+    } >> "$1"
+
 }
 
 # CAT comes from settings.sh
@@ -28,8 +33,8 @@ GetCategory() {
     do
 	A=CAT$i
 	B=CATNAME$i
-	A=$(eval echo \$$A)
-	B=$(eval echo \$$B)
+	A=$(eval echo \$"$A")
+	B=$(eval echo \$"$B")
         test "$1" = "$A" && USECATEGORY="$B"
         test "$1" = "$B" && USECATEGORY="$1"
     done
@@ -37,24 +42,30 @@ GetCategory() {
 
 # create index page 
 rm index.groff
-custom_index=`cat index_custom.groff`
-echo ".B \"""$SITETITLE""\"" >> index.groff
-echo "" >> index.groff
-echo ".B \"""$SITEDESCRIPTION""\"" >> index.groff
-echo "" >> index.groff
-test "$SHOWMAILTO" = "YES" && echo ".MTO "$MAILTO >> index.groff
-test "$SHOWMAILTO" = "Yes" && echo ".MTO "$MAILTO >> index.groff
-test "$SHOWMAILTO" = "yes" && echo ".MTO "$MAILTO >> index.groff
-echo "" >> index.groff
+custom_index=$(cat index_custom.groff)
+{
+    echo ".B \"""$SITETITLE""\""
+    echo ""
+    echo ".B \"""$SITEDESCRIPTION""\""
+    echo ""
+    echo ".MTO "$MAILTO
+    echo ""
+} >> index.groff
 for i in $(seq 1 $CATCOUNT) 
 do
     A=CAT$i
     B=CATNAME$i
-    A=$(eval echo \$$A)
-    B=$(eval echo \$$B)
-    PAGEFILENAME=$(echo "$A" | tr '[A-Z]' '[a-z]')
-    echo ".URL "$PAGEFILENAME".html \""$B"\"" >> index.groff
-    echo "" >> index.groff
+    A=$(eval echo \$"$A")
+    B=$(eval echo \$"$B")
+    PAGEFILENAME=$(echo "$A" | tr '[:upper:]' '[:lower:]')
+    {
+        printf ".URL %s.html" "$PAGEFILENAME"
+        printf " \""
+        printf "%s" "$B"
+        printf "\""
+        printf "\n"
+        printf "\n"
+    } >> index.groff
 done
 cat index_custom.groff >> index.groff
 # generate index page
@@ -65,18 +76,13 @@ for i in $(seq 1 $CATCOUNT)
 do
     A=CAT$i
     B=CATNAME$i
-    A=$(eval echo \$$A)
-    B=$(eval echo \$$B)
-    PAGEFILENAME=$(echo "$A" | tr '[A-Z]' '[a-z]')
+    A=$(eval echo \$"$A")
+    B=$(eval echo \$"$B")
+    PAGEFILENAME=$(echo "$A" | tr '[:upper:]' '[:lower:]')
     rm -f "$PAGEFILENAME".groff
     test -f "$PAGEFILENAME"_custom.groff && cat "$PAGEFILENAME"_custom.groff >> $PAGEFILENAME.groff
-    for f in "$PAGEFILENAME"_custom.*.groff; do
-        cat "$f" >> $PAGEFILENAME.groff
-    done
     echo "" >> $PAGEFILENAME.groff
-    test "$SHOWRECENTPOSTS" = "YES" && echo ".B \"Recent Posts\"" >> $PAGEFILENAME.groff    
-    test "$SHOWRECENTPOSTS" = "Yes" && echo ".B \"Recent Posts\"" >> $PAGEFILENAME.groff    
-    test "$SHOWRECENTPOSTS" = "yes" && echo ".B \"Recent Posts\"" >> $PAGEFILENAME.groff    
+    echo ".B \"Recent Posts\"" >> $PAGEFILENAME.groff    
     for f in $(ls -1r posts/*/*/*)
     do
         LINK=$(echo $f | sed "s/.groff/.html/g")
@@ -117,7 +123,7 @@ for f in web/*.html
 done
 
 rm -f now.groff
-test -d posts && grep -r ".TL" $(ls -1r posts/*/*/*) | sed "s/.groff/.html/g" | sed "s/posts/\n.URL posts/g" | sed "s/:.TL / /g" >> now.groff
+grep -r ".TL" $(ls -1r posts/*/*/*) | sed "s/.groff/.html/g" | sed "s/posts/\n.URL posts/g" | sed "s/:.TL / /g" >> now.groff
 groff -ms -mwww -T html now.groff > web/now.html
 DateStamp web/now.html "$(date +'%Y-%m-%d %H:%M:%S')"
 
@@ -137,7 +143,7 @@ for f in posts/*/*/*
         TITLE=$(grep -r -m1 ".TL" "$f" | sed "s/.TL //g" | sed "s/_/ /g")
         CATEGORY=$(grep -r -m1 ".CAT" "$f" | sed "s/.CAT //g")
         AUTHOR=$(grep -r -m1 ".AU" "$f" | sed "s/.AU //g")
-        GetCategory $CATEGORY
+        GetCategory "$CATEGORY"
         echo "$SPACES<title>$TITLE</title>" >> web/rss.xml
         echo "$SPACES<link>$SITEADDRESS$GENERATED</link>" >> web/rss.xml
         echo "$SPACES<description>$TITLE</description>" >> web/rss.xml
