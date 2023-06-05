@@ -1,3 +1,5 @@
+#!/bin/sh
+
 SITENAME="My Website"
 SITEADDRESS=https://spacefreak18.xyz
 SITETITLE="Pauls Personal Web Hub"

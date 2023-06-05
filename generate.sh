@@ -5,21 +5,24 @@ mkdir -p web
 . ./settings.sh
 
 DateStamp() {
-    sed -i '$ d' $1
-    echo -n "<p>Page Last Edited: " >> $1
-    echo -n "$2" | sed -s 's/Date: //' >> $1
-    echo "</p>" >> $1
-    echo -n "</html>" >> $1
+    sed -i '$ d' "$1"
+    {
+        printf "<p>Page Last Edited: %s\n" "$2"
+        echo "</p>"
+        printf "</html>\n"
+    } >> "$1"
 
 }
 
 
 HashOver() {
-    sed -i '$ d' $1
-    echo "<div id=\"hashover\"></div>" >> $1
-    echo "<script type=\"text/javascript\" src=\"../../../hashover/comments.php\"></script>" >> $1
-    echo "<noscript>You must have javascript enabled for comments.</noscript>" >> $1
-    echo "</html>" >> $1
+    sed -i '$ d' "$1"
+    {
+        echo "<div id=\"hashover\"></div>"
+        echo "<script type=\"text/javascript\" src=\"../../../hashover/comments.php\"></script>"
+        echo "<noscript>You must have javascript enabled for comments.</noscript>"
+        echo "</html>"
+    } >> "$1"
 
 }
 
@@ -30,8 +33,8 @@ GetCategory() {
     do
 	A=CAT$i
 	B=CATNAME$i
-	A=$(eval echo \$$A)
-	B=$(eval echo \$$B)
+	A=$(eval echo \$"$A")
+	B=$(eval echo \$"$B")
         test "$1" = "$A" && USECATEGORY="$B"
         test "$1" = "$B" && USECATEGORY="$1"
     done
@@ -39,22 +42,30 @@ GetCategory() {
 
 # create index page 
 rm index.groff
-custom_index=`cat index_custom.groff`
-echo ".B \"""$SITETITLE""\"" >> index.groff
-echo "" >> index.groff
-echo ".B \"""$SITEDESCRIPTION""\"" >> index.groff
-echo "" >> index.groff
-echo ".MTO "$MAILTO >> index.groff
-echo "" >> index.groff
+custom_index=$(cat index_custom.groff)
+{
+    echo ".B \"""$SITETITLE""\""
+    echo ""
+    echo ".B \"""$SITEDESCRIPTION""\""
+    echo ""
+    echo ".MTO "$MAILTO
+    echo ""
+} >> index.groff
 for i in $(seq 1 $CATCOUNT) 
 do
     A=CAT$i
     B=CATNAME$i
-    A=$(eval echo \$$A)
-    B=$(eval echo \$$B)
-    PAGEFILENAME=$(echo "$A" | tr '[A-Z]' '[a-z]')
-    echo ".URL "$PAGEFILENAME".html \""$B"\"" >> index.groff
-    echo "" >> index.groff
+    A=$(eval echo \$"$A")
+    B=$(eval echo \$"$B")
+    PAGEFILENAME=$(echo "$A" | tr '[:upper:]' '[:lower:]')
+    {
+        printf ".URL %s.html" "$PAGEFILENAME"
+        printf " \""
+        printf "%s" "$B"
+        printf "\""
+        printf "\n"
+        printf "\n"
+    } >> index.groff
 done
 cat index_custom.groff >> index.groff
 # generate index page
@@ -65,9 +76,9 @@ for i in $(seq 1 $CATCOUNT)
 do
     A=CAT$i
     B=CATNAME$i
-    A=$(eval echo \$$A)
-    B=$(eval echo \$$B)
-    PAGEFILENAME=$(echo "$A" | tr '[A-Z]' '[a-z]')
+    A=$(eval echo \$"$A")
+    B=$(eval echo \$"$B")
+    PAGEFILENAME=$(echo "$A" | tr '[:upper:]' '[:lower:]')
     rm -f "$PAGEFILENAME".groff
     test -f "$PAGEFILENAME"_custom.groff && cat "$PAGEFILENAME"_custom.groff >> $PAGEFILENAME.groff
     echo "" >> $PAGEFILENAME.groff
@@ -132,7 +143,7 @@ for f in posts/*/*/*
         TITLE=$(grep -r -m1 ".TL" "$f" | sed "s/.TL //g" | sed "s/_/ /g")
         CATEGORY=$(grep -r -m1 ".CAT" "$f" | sed "s/.CAT //g")
         AUTHOR=$(grep -r -m1 ".AU" "$f" | sed "s/.AU //g")
-        GetCategory $CATEGORY
+        GetCategory "$CATEGORY"
         echo "$SPACES<title>$TITLE</title>" >> web/rss.xml
         echo "$SPACES<link>$SITEADDRESS$GENERATED</link>" >> web/rss.xml
         echo "$SPACES<description>$TITLE</description>" >> web/rss.xml
