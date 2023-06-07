@@ -1,0 +1,82 @@
+.TL F1_Sim_Wheel
+.AU Paul Jones
+.CAT TECH
+
+.HnS 1
+.HR
+F1 Sim Wheel
+.HR
+.HnE
+
+.LP
+
+.PIMG https://repo.brak.space/web/f1simwheel/finished-front.jpg
+
+Continuing my quest to build an open source immersive sim rig, a necessary side project was to add yet another steering wheel for modern single seaters. This turned out to be more of a challenge than I intended.
+
+.LP
+.LP
+.LG
+.HnS 2
+.HR
+Parts
+.HR
+.HnE
+.LN
+.LP
+For a base I used the 3d printed F1 wheel from 3drap, and for the lcd screen i chose the vocore2
+.LP
+.URL https://www.3drap.it/product/f1-steering-wheel-kit-by-3drap-thrustmaster-logitech-osw/ "3drap osw"
+.LP
+.URL https://hsimracing.com/product/button-box-usb-card/ "usb card"
+.LP
+.URL https://simracing-pc.de/en/vocore-screen-im-test-2/ "vocore screen"
+.LP
+The buttons, spiral chords, I procured from amazon fairly easily.
+The LEDs are from my shift lights project, and i route the wires through the steering wheel.
+.URL https://github.com/spacefreak18/monocoque "shift lights"
+.LP
+.PIMG https://repo.brak.space/web/f1simwheel/unfinished.jpg
+.LP
+Internally there is not much else going on, the usb pcb is secured to the back of the lcd screen using velcro.
+
+.HnS 2
+.HR
+Software
+.HR
+.HnE
+.LP
+.LP
+On the software side of things is where this project gets interesting. The USB is plug and play. The lcd screen has an opensource driver that was fairly easy to find and compile, and after that I could write random pixels to the lcd.
+.URL https://github.com/Vonger/vocore2/tree/master/utils/fbusb "vocore2 fbusb kernel module"
+
+.LP
+Unfortunately I quickly found out that the default mode for the vocore2 is portrait mode, all examples using the lvgl were in portrait mode, and there was no obvious way to change the layout to portrait in hardware.
+.URL https://github.com/Vonger/vocore2/issues/43 "I created an issue in the vocore2 project after trying everything including passing the usb commands to rotate it inside the fbusb driver."
+.LP
+So we need to find a library that can write to the framebuffer and support rotation. SDL2 has removed framebuffer support. Something like LVGL was interesting, but I'd have to add rotation to it. Same with any other kind of graphics library that uses SDL1 underneath. I did go down this road, trying to use sdl rotozoom to rotate the display. But we're not really doing a rotozoom, we're doing an X -> Y swap. We want to build our screen in landscape coordinates, and then swap the pixels in order to send a portrait oriented frame to the hardware. Instead of doing a lot of hacking to LVGL, or a similar library, I went for something lighter weight, that was more specialized for dealing with linux framebuffers.
+.LP
+I found an abandoned project called
+.URL https://github.com/OrangeTide/fbgfx " fbgfx"
+And I quickly was thrown into a crash course on dealing with linux framebuffers. I actually went through a few different projects, but settled on fbgfx because of it's minimalism and native support for 16 bits per pixel by default.
+.LP
+From my previoius trials, it was a matter of about an hour of hacking to the fbgfx library to do the pixel swap in software. By looking for an environmental variable called FBROTATE set to 1, it will setup software double buffering, with the "virtual" buffer in landscape, then rotate the pixels as it copies those pixels into the "true" hardware buffer. This can be seen in my fbgfx
+.URL https://github.com/spacefreak18/fbgfx " fork."
+.LP
+The second issue was figuring out how to deal with fonts. The author of fbgfx included the ability to write text to the framebuffer, but without an ability to resize said font. Luckily we do not need to reinvent the wheel here, I simply followed the example from
+.URL https://kevinboone.me/fbtextdemo.html?i=1 " fbtextdemo"
+on how to use the freetype2 library to render truetype fonts in any size to any framebuffer, as long as you have the ability to manipulate individual pixels.
+.LP
+After this it was a fairly simple task to create my
+.URL https://github.com/spacefreak18/simlcd " simlcd"
+project. It is far from complete. The possibilities are endless, but I do intend in the near future to add a configuration file that will allow the ability to specify where things appear on the screen with user defined fonts, without the need for code changes. This means users can define their own screen designs and not just use what I have created so far in my example screenshots and images. It is even conceivable that we can create a screen designer that generates these config files using a WYSIWYG GUI.
+.LP
+.HTML <video controls autoplay><source src="https://repo.brak.space/web/f1simwheel/vid.mp4" type="video/mp4"></video>
+.LP
+.LP
+Receiving the data from the simulator is accomplished by a shared library I wrote called
+.URL https://github.com/spacefreak18/simapi " simapi."
+This library is used by all my projects that are part of this initiative to create cross platform open source alternatives for home racing simulator accessories.
+.LP
+If this wheel interests you, I can produce one for you for about $3000. If interested, send me an
+.MTO f1simwheel@spacefreak18.xyz "email"
